@@ -19,7 +19,7 @@ func (u User) Userinfo() string { // u User параметр со строкой
 }
 
 func (u *User) setName(newName string) {
-	u.name = newName
+	u.name = newName //попытка поменять имя через ссылку *
 }
 
 func home_page(z http.ResponseWriter, r *http.Request) {
