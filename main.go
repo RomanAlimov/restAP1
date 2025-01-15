@@ -3,6 +3,7 @@ package main /* обязательный пакет который сообща�
 
 import (
 	"fmt" // пакеты для работы кода.
+	"html/template"
 	"net/http"
 )
 
@@ -17,9 +18,14 @@ func (u User) Userinfo() string { // u User параметр со строкой
 		"Монеты: %d", u.name, u.age, u.money) // возвращаем формат строки и подстравиваем в проценты параметр
 }
 
+func (u *User) setName(newName string) {
+	u.name = newName //попытка поменять имя через ссылку *
+}
+
 func home_page(z http.ResponseWriter, r *http.Request) {
-	citizen := User{"user", 25, 50}    // Имя - возраст - монеты
-	fmt.Fprintf(z, citizen.Userinfo()) // запуск метода Userinfo(), который
+	citizen := User{"user", 25, 50}
+	tmpl, _ := template.ParseFiles("templates/home_page.html")
+	tmpl.Execute(z, citizen)
 }
 
 func contacts_page(z http.ResponseWriter, r *http.Request) {
@@ -29,7 +35,7 @@ func contacts_page(z http.ResponseWriter, r *http.Request) {
 func handleRec() {
 	http.HandleFunc("/", home_page)
 	http.HandleFunc("/contacts/", contacts_page) // Обработка главной страницы и адрес ссылки.
-	http.ListenAndServe(":80", nil)              // Запуск локального сервера порт 80 /localhost
+	http.ListenAndServe(":80", nil)              // Запуск локального сервера порт 80 /localhost.
 }
 
 func main() {
@@ -39,3 +45,4 @@ func main() {
 }
 
 // запуск через go run main.go cmd или vs code (терминал), зайти на локальный хост.
+//0
